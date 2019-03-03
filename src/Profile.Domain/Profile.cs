@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Profile.Domain
 {
     public class Profile
     {
-        public string id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
         public string Name { get; set; }
     }
 }

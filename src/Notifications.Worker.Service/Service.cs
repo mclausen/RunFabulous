@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Notifications.Infrastructure;
 using Rebus.Config;
 using Rebus.Retry.Simple;
 using Rebus.ServiceProvider;
@@ -27,6 +29,7 @@ namespace Notifications.Worker.Service
         {
             services = new ServiceCollection();
             //services.AutoRegisterHandlersFromAssemblyOf<>();
+            services.AddSingleton<IDocumentClient>(DocumentClientFactory.Create());
         }
 
         /// <summary>

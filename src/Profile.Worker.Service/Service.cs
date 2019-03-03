@@ -12,6 +12,8 @@ using Rebus.Config;
 using Rebus.ServiceProvider;
 using Rebus.Retry.Simple;
 using System.IO;
+using Microsoft.Azure.Documents;
+using Profile.Infrastructure;
 
 namespace Profile.Worker.Service
 {
@@ -28,6 +30,7 @@ namespace Profile.Worker.Service
         {
             services = new ServiceCollection();
             services.AutoRegisterHandlersFromAssemblyOf<CreateProfileCommandHandler>();
+            services.AddSingleton<IDocumentClient>(DocumentClientFactory.Create());
         }
 
         /// <summary>
