@@ -10,11 +10,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.1.301" />
+    <PackageReference Include="Rebus" Version="5.2.1" />
+    <PackageReference Include="Rebus.AzureServiceBus" Version="6.0.7" />
+    <PackageReference Include="Rebus.ServiceProvider" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Profile.Domain\Profile.Domain.csproj" />
     <ProjectReference Include="..\Profile.Infrastructure\Profile.Infrastructure.csproj" />
+    <ProjectReference Include="..\Profile.Messages.External\Profile.Messages.External.csproj" />
   </ItemGroup>
 
 </Project>

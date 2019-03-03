@@ -9,6 +9,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Rebus.Config;
+using Rebus.ServiceProvider;
+using Rebus.AzureServiceBus;
+using Rebus.Routing.TypeBased;
+using Profile.Messages.External.Commands;
+using System.IO;
 
 namespace Gateway.Api.Service
 {
@@ -25,6 +31,16 @@ namespace Gateway.Api.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var connstring = GetConnectionString();
+
+            services.AddRebus(configure =>
+            {
+                return configure
+                    .Logging(l => l.ColoredConsole())
+                    .Transport(t => t.UseAzureServiceBusAsOneWayClient(connstring))
+                    .Routing(r => r.TypeBased().Map<CreateProfileCommand>("profile-input"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +52,14 @@ namespace Gateway.Api.Service
             }
 
             app.UseMvc();
+            app.UseRebus();
+        }
+
+        private string GetConnectionString()
+        {
+            const string path = @"C:\Deployment\ASB-ConnString.txt";
+            var constring = File.ReadAllLines(path).First().Trim();
+            return constring;
         }
     }
 }

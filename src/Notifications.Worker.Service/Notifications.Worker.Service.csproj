@@ -11,10 +11,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.3.637" />
+    <PackageReference Include="Rebus" Version="5.2.1" />
+    <PackageReference Include="Rebus.AzureServiceBus" Version="6.0.7" />
+    <PackageReference Include="Rebus.ServiceProvider" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Notifications.Messages.External\Notifications.Messages.External.csproj" />
     <ProjectReference Include="..\Notifications.Domain\Notifications.Domain.csproj" />
     <ProjectReference Include="..\Notifications.Infrastructure\Notifications.Infrastructure.csproj" />
   </ItemGroup>

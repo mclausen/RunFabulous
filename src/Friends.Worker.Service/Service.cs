@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Rebus.Config;
+using Rebus.Retry.Simple;
+using Rebus.ServiceProvider;
 
 namespace Friends.Worker.Service
 {
@@ -14,9 +19,15 @@ namespace Friends.Worker.Service
     /// </summary>
     internal sealed class Service : StatelessService
     {
+        private readonly ServiceCollection services;
+        private IServiceProvider provider;
+
         public Service(StatelessServiceContext context)
             : base(context)
-        { }
+        {
+            services = new ServiceCollection();
+            //services.AutoRegisterHandlersFromAssemblyOf<>();
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -33,19 +44,45 @@ namespace Friends.Worker.Service
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
-
-            long iterations = 0;
-
-            while (true)
+            if (cancellationToken.IsCancellationRequested == false)
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                var connString = GetConnectionString();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                services.AddRebus(configure =>
+                {
+                    return configure
+                        .Logging(l => l.ColoredConsole())
+                        .Transport(t => t.UseAzureServiceBus(connectionStringNameOrConnectionString: connString, inputQueueAddress: "friends-input"))
+                        .Options(o => o.SimpleRetryStrategy("friends-error"));
+                });
 
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                provider = services.BuildServiceProvider();
+                provider.UseRebus();
             }
+        }
+
+        protected override Task OnCloseAsync(CancellationToken cancellationToken)
+        {
+            Dispose();
+            return base.OnCloseAsync(cancellationToken);
+        }
+
+        protected override void OnAbort()
+        {
+            Dispose();
+            base.OnAbort();
+        }
+
+        private void Dispose()
+        {
+
+        }
+
+        private string GetConnectionString()
+        {
+            const string path = @"C:\Deployment\ASB-ConnString.txt";
+            var constring = File.ReadAllLines(path).First().Trim();
+            return constring;
         }
     }
 }

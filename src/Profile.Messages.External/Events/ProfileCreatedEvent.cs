@@ -2,11 +2,11 @@
 
 namespace Profile.Messages.External
 {
-    public class ProfileCreatedMessage
+    public class ProfileCreatedEvent
     {
         public string ProfileId { get; protected set; }
 
-        public ProfileCreatedMessage(string profileId)
+        public ProfileCreatedEvent(string profileId)
         {
             if (string.IsNullOrWhiteSpace(profileId)) throw new ArgumentNullException(nameof(profileId));
             ProfileId = profileId;
