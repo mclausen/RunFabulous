@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="section-title" class="titleslide slide level1">
+				<h1>Event Driven Microservice architecture</h1>
+				<h2><small>How to build and scale services into the universe and beyond</small></h2>
+				<p>
+					<small>Created by <a href="https://github.com/mclausen">Martin Humlund Clausen</a></small>
+				</p>
+			</section>
+
+			<section id="boundedContext">
+				<section>
+					<h2>Bounded Context</h2>
+				</section>
+				<section>
+					<h2>Context Maps</h2>
+					<!-- Create context map of fictive domain -->
+				</section>
+			</section>
+
+			<section id="generalArchitecture">
+				<section>
+					<h2>Bird eyes view</h2>
+					<!-- Use Context map to create a cluster mockup -->
+				</section>
+
+				<section>
+					<h2>Micro service</h2>
+					<!-- What is a micro service -->
+					<!-- Domain Centric -->
+					<!-- What is an aggregate root, and how to implement it -->
+				</section>
+				<section>
+					<h2>Clean architecture</h2>
+					<!---->
+				</section>
+			</section>
+
+			<section id="cqrs">
+				<section>
+					<h2>CQRS</h2>
+					<p>Command Query Responsibility Segregation</p>
+				</section>
+				<section>
+					<h2>What is it?</h2>
+					<p>Separates the read from the writes</p>
+					<div class="container">
+						<div class="col">
+							<p>Commands</p>
+							<ul>
+								<li>Has side effects</li>
+								<li>Modifies state</li>
+								<li>Does not return a result</li>
+							</ul>
+						</div>
+						<div class="col">
+							<p>Queries</p>
+							<ul>
+								<li>Answers a request</li>
+								<li>Does modify state</li>
+								<li>Does return a value</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h2>Variations of CQRS</h2>
+					<ul>
+						<li>Single database read/writes</li>
+						<li>Two databases, one of writes and one for read models</li>
+						<li>Event sourcing</li>
+					</ul>
+				</section>
+			</section>
+
+			<section id="servicebusIntegrationPatterns">
+				<section>
+					<h2>General service bus</h2>
+					<ul>
+							<li>Producer/Consumer</li>
+							<li>Publisher/subscriber</li>
+							<li>Input queue pr service</li>
+						</ul>
+				</section>
+				<section>
+					<h2>It puts a message on the bus</h2>
+					<p>Puts a message directly in the consumer input queue</p>
+				</section>
+				<section>
+					<h2>It puts a message on Topic</h2>
+					<p>Topic distributes messages into subscriptions input queue</p>
+				</section>
+				<section>
+					<h2>Commands and events</h2>
+					<div class="container">
+							<div class="col">
+								<p>Commands</p>
+								<ul>
+									<li>Has side effects</li>
+									<li>Modifies state</li>
+									<li>Does not return a result</li>
+									<li>Send directly to the Handling service input queue</li>
+									<li>Contains information needed to Update the state</li>
+								</ul>
+							</div>
+							<div class="col">
+								<p>Events</p>
+								<ul>
+									<li>Describe a thing that has happened</li>
+									<li>Published onto a Topic</li>
+									<li>Only contains identifying properties</li>
+								</ul>
+							</div>
+						</div>
+				</section>
+				<section>
+					<h2>Integration patterns for dealing with updates</h2>
+					<!-- Insert image of scenario -->
+				</section>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true }
+			]
+		});
+	</script>
+</body>
+
+</html>
