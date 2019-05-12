@@ -48,10 +48,17 @@
 			<section id="boundedContext">
 				<section>
 					<h2>Bounded Context</h2>
+					<ul>
+						<li>An organizational chart of an application
+						<li>
+						<li>Defines the application domain</li>
+						<li>Consists of multiple highly cooperative micro services</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Context Maps</h2>
 					<!-- Create context map of fictive domain -->
+
 				</section>
 			</section>
 
@@ -60,19 +67,59 @@
 					<h2>Bird eyes view</h2>
 					<!-- Use Context map to create a cluster mockup -->
 				</section>
-
+			</section>
+			<section id="servicebusIntegrationPatterns">
 				<section>
-					<h2>Micro service</h2>
-					<!-- What is a micro service -->
-					<!-- Domain Centric -->
-					<!-- What is an aggregate root, and how to implement it -->
+					<h2>General service bus</h2>
+					<ul>
+						<li>Producer/Consumer</li>
+						<li>Publisher/subscriber</li>
+						<li>Input queue pr service</li>
+					</ul>
 				</section>
 				<section>
-					<h2>Clean architecture</h2>
-					<!---->
+					<h2>It puts a message on the bus</h2>
+					<ul>
+						<li>Sends a message directly on to the consumer input queue</li>
+						<li>One way communication</li>
+						<li>Commands</li>
+					</ul>
+				</section>
+				<section>
+					<h2>It puts a message on Topic</h2>
+					<ul>
+						<li>Sends the message to a Topic, that forwards messages into subscribing input queues</li>
+						<li>One to many communication</li>
+						<li>Events</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Demo</h2>
+				</section>
+				<section>
+					<h2>Commands and events - recap</h2>
+					<div class="container">
+						<div class="col">
+							<p>Commands</p>
+							<ul>
+								<li>Has side effects</li>
+								<li>Modifies state</li>
+								<li>Does not return a result</li>
+								<li>Send directly to the Handling service input queue</li>
+								<li>Contains information needed to Update the state</li>
+							</ul>
+						</div>
+						<div class="col">
+							<p>Events</p>
+							<ul>
+								<li>Describe a thing that has happened</li>
+								<li>Published onto a Topic</li>
+								<li>Only contains identifying properties</li>
+							</ul>
+						</div>
+					</div>
 				</section>
 			</section>
-
 			<section id="cqrs">
 				<section>
 					<h2>CQRS</h2>
@@ -83,7 +130,7 @@
 					<p>Separates the read from the writes</p>
 					<div class="container">
 						<div class="col">
-							<p>Commands</p>
+							<p><u>Commands via Service bus</u></p>
 							<ul>
 								<li>Has side effects</li>
 								<li>Modifies state</li>
@@ -91,7 +138,7 @@
 							</ul>
 						</div>
 						<div class="col">
-							<p>Queries</p>
+							<p><u>Queries via Http</u></p>
 							<ul>
 								<li>Answers a request</li>
 								<li>Does modify state</li>
@@ -110,52 +157,65 @@
 				</section>
 			</section>
 
-			<section id="servicebusIntegrationPatterns">
-				<section>
-					<h2>General service bus</h2>
-					<ul>
-							<li>Producer/Consumer</li>
-							<li>Publisher/subscriber</li>
-							<li>Input queue pr service</li>
-						</ul>
-				</section>
-				<section>
-					<h2>It puts a message on the bus</h2>
-					<p>Puts a message directly in the consumer input queue</p>
-				</section>
-				<section>
-					<h2>It puts a message on Topic</h2>
-					<p>Topic distributes messages into subscriptions input queue</p>
-				</section>
-				<section>
-					<h2>Commands and events</h2>
-					<div class="container">
-							<div class="col">
-								<p>Commands</p>
-								<ul>
-									<li>Has side effects</li>
-									<li>Modifies state</li>
-									<li>Does not return a result</li>
-									<li>Send directly to the Handling service input queue</li>
-									<li>Contains information needed to Update the state</li>
-								</ul>
-							</div>
-							<div class="col">
-								<p>Events</p>
-								<ul>
-									<li>Describe a thing that has happened</li>
-									<li>Published onto a Topic</li>
-									<li>Only contains identifying properties</li>
-								</ul>
-							</div>
-						</div>
-				</section>
-				<section>
-					<h2>Integration patterns for dealing with updates</h2>
-					<!-- Insert image of scenario -->
-				</section>
+
+			<section id="eventualconsistancy">
+				<h2>Embrace eventual consistency!</h2>
+				<p>But deal with it with it, accordingly</p>
 			</section>
 
+			<section>
+				<h2>Keep your users informed on whats going on!</h2>
+				<p>Use signal R</p>
+			</section>
+
+			<section id="microservice">
+				<section>
+					<h2>Micro service(s)</h2>
+					<small>With a twist</small>
+					<ul>
+						<li>A Service should be small</li>
+						<li>Centred around an Domain entity / Aggregrate root</li>
+						<li>Clean architecture</li>
+						<li>The twist...</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Each service has two services</h2>
+					<p>What is this mad man talking about?</p>
+				</section>
+				<section>
+					<h2>Each service</h2>
+					<ul>
+						<li>Contains all the logic for the Domain</li>
+						<li>It has a Api service - To process queries</li>
+						<li>It has a Worker service - To process services</li>
+						<li>In the their own process</li>
+					</ul>>
+				</section>
+				<section>
+					<h2>Why?</h2>
+					<ul>
+						<li>Complete separation of read/writes</li>
+						<li>Easy data migrations - Events and data synchronization are not affecting the users</li>
+						<li>Self balancing - in due time</li>
+					</ul>
+				</section>
+				<section>
+						<h2>The real magic</h2>
+						<p>Individual scalable components!</p>
+					</section>
+			</section>
+			<section>
+				<h2>Demo</h2>
+				<!---->
+			</section>
+
+			<section id="Take it back">
+				<section>
+					<h2>Show Api - relays commands</h2>
+					<!---->
+				</section>
+			</section>
 		</div>
 	</div>
 
